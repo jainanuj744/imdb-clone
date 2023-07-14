@@ -1,6 +1,6 @@
 function Movies(){
     return(
-        <h1>WishList Component Works!</h1>
+        <h1>Movies Component Works!</h1>
     )
 }
 

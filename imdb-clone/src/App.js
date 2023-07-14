@@ -7,7 +7,7 @@ import WishList from './Components/WishList';
 function App() {
   return (
     <div className="App">
-      <h1>IMDB</h1>
+      <h1 className="text-3xl font-bold underline">IMDB</h1>
       <Header/>
       <Banner/>
       <Movies/>
