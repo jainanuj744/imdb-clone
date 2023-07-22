@@ -48,7 +48,12 @@ function Movies() {
 
   useEffect(() => {
     let moviesFromLocalStorage = localStorage.getItem("IMDB");
-    setWatchList(JSON.parse(moviesFromLocalStorage));
+    if(moviesFromLocalStorage==null){
+      return;
+    }else{
+      setWatchList(JSON.parse(moviesFromLocalStorage));
+
+    }
   }, [pageNo]);
 
   return (
