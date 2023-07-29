@@ -2,13 +2,32 @@ import { useEffect, useState } from "react";
 import genreids from "../Utility/genre";
 
 function WishList(props) {
-  let { watchList, handleRemoveFromWatchList } = props;
+  let { watchList, handleRemoveFromWatchList, setWatchList } = props;
 
   let [genreList, setGenreList] = useState(["All Genre"]);
   let [currGenre, setCurrGenre] = useState(["All Genre"]);
+  let [search, setSearch] = useState("");
 
   let handleFilter = (genre)=>{
     setCurrGenre(genre);
+  }
+
+  let handleSearch = (e) =>{
+    setSearch(e.target.value);
+  }
+
+  let sortIncreasing = ()=>{
+    let sorted = watchList.sort((mA,mB)=>{
+        return mA.vote_average - mB.vote_average;
+    })
+    setWatchList([...sorted]);
+  }
+
+  let sortDecreasing = ()=>{
+    let sorted = watchList.sort((mA,mB)=>{
+        return mB.vote_average - mA.vote_average;
+    })
+    setWatchList([...sorted]);
   }
 
   useEffect(() => {
@@ -36,6 +55,8 @@ function WishList(props) {
       </div>
       <div className="flex justify-center my-[2rem]">
         <input
+          onChange={handleSearch}
+          value={search}
           placeholder="Search for movies"
           type="text"
           className="w-[15rem] h-[2rem] bg-gray-200 rounded-2xl flex justify-center items-center text-black px-3 outline-none"
@@ -47,8 +68,8 @@ function WishList(props) {
             <tr>
               <th>Name</th>
               <th>
-                <i className="fa-solid fa-up-long px-1.5"></i>Rating
-                <i className="fa-solid fa-down-long px-1.5"></i>
+                <i onClick={sortIncreasing} className="fa-solid fa-up-long px-1.5"></i>Rating
+                <i onClick={sortDecreasing} className="fa-solid fa-down-long px-1.5"></i>
               </th>
               <th>Popularity</th>
               <th>Genre</th>
@@ -57,11 +78,14 @@ function WishList(props) {
           </thead>
           <tbody>
             {watchList.filter((obj)=>{
-                if(currGenre === "All Genre"){
+                if(currGenre == "All Genre"){
                     return true;
                 }else{
-                    return genreids[obj.genre_ids[0]] === currGenre;
+                    return genreids[obj.genre_ids[0]] == currGenre;
                 }
+            })
+            .filter((movieObj)=>{
+                return movieObj.title.toLowerCase().includes(search.toLocaleLowerCase());
             })
             .map((movieObj) => {
               return (
