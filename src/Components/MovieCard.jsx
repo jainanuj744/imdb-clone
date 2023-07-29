@@ -1,4 +1,16 @@
 function MovieCard(props) {
+
+  let {watchList, poster_path, movieObj, handleRemoveFromWatchList, handleAddToWatchList, name} = props;
+
+  function isContain(movieObj){
+    for(let i=0;i<watchList.length;i++){
+      if(watchList[i].id == movieObj.id){
+        return true;
+      }
+    }
+    return false;
+
+  }
   return (
     <div>
       <div className="flex flex-wrap justify-center">
@@ -7,27 +19,27 @@ function MovieCard(props) {
                     flex items-end rounded-2xl hover:scale-110 cursor-pointer duration-300
                     flex-col justify-between"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original/${props.poster_path})`,
+            backgroundImage: `url(https://image.tmdb.org/t/p/original/${poster_path})`,
           }}
         >
-          {props.watchList.includes(props.id) ? (
+          {isContain(movieObj) ? (
             <div
               className="m-3 h-10 w-10 bg-gray-900/60 flex items-center justify-center rounded-2xl"
-              onClick={() => props.handleRemoveFromWatchList(props.id)}
+              onClick={() => handleRemoveFromWatchList(movieObj)}
             >
               &#10060;
             </div>
           ) : (
             <div
               className="m-3 h-10 w-10 bg-gray-900/60 flex items-center justify-center rounded-2xl"
-              onClick={() => props.handleAddToWatchList(props.id)}
+              onClick={() => handleAddToWatchList(movieObj)}
             >
               &#128525;
             </div>
           )}
 
           <div className="text-white bg-gray-500/50 w-full text-center rounded-2xl ">
-            {props.name}
+            {name}
           </div>
         </div>
       </div>

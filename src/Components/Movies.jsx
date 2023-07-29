@@ -3,12 +3,17 @@ import MovieCard from "./MovieCard";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 
-function Movies() {
+function Movies(props) {
   let [movies, setMovies] = useState([]);
 
   let [pageNo, setPageNo] = useState(1);
 
-  let [watchList, setWatchList] = useState([]);
+  let {
+    setWatchList,
+    watchList,
+    handleAddToWatchList,
+    handleRemoveFromWatchList,
+  } = props;
 
   let handleClickPrev = () => {
     if (pageNo > 1) setPageNo(pageNo - 1);
@@ -16,22 +21,6 @@ function Movies() {
 
   let handleClickNext = () => {
     setPageNo(pageNo + 1);
-  };
-
-  let handleAddToWatchList = (movieId) => {
-    // watchList.push(movieId); it will not work since the reference is same
-    let list = [...watchList, movieId];
-    localStorage.setItem("IMDB", JSON.stringify(list));
-    setWatchList(list);
-  };
-
-  let handleRemoveFromWatchList = (movieId) => {
-    // watchList.push(movieId); it will not work since the reference is same
-    let filterdList = watchList.filter((id) => {
-      return id !== movieId;
-    });
-    localStorage.setItem("IMDB", JSON.stringify(filterdList));
-    setWatchList(filterdList);
   };
 
   // console.log(watchList);
@@ -48,11 +37,10 @@ function Movies() {
 
   useEffect(() => {
     let moviesFromLocalStorage = localStorage.getItem("IMDB");
-    if(moviesFromLocalStorage==null){
+    if (!moviesFromLocalStorage) {
       return;
-    }else{
+    } else {
       setWatchList(JSON.parse(moviesFromLocalStorage));
-
     }
   }, [pageNo]);
 
@@ -64,7 +52,7 @@ function Movies() {
           return (
             <MovieCard
               key={movieObj.id}
-              id={movieObj.id}
+              movieObj={movieObj}
               watchList={watchList}
               name={movieObj.title}
               poster_path={movieObj.poster_path}
