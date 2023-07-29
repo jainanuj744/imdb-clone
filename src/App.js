@@ -4,10 +4,20 @@ import Banner from "./Components/Banner";
 import Header from "./Components/Header";
 import Movies from "./Components/Movies";
 import WishList from "./Components/WishList";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   let [watchList, setWatchList] = useState([]);
+
+  let [pageNo, setPageNo] = useState(1);
+
+  let handleClickPrev = () => {
+    if (pageNo > 1) setPageNo(pageNo - 1);
+  };
+
+  let handleClickNext = () => {
+    setPageNo(pageNo + 1);
+  };
 
   let handleAddToWatchList = (movieObj) => {
     // watchList.push(movieId); it will not work since the reference is same
@@ -25,6 +35,15 @@ function App() {
     setWatchList(filterdList);
   };
 
+  useEffect(() => {
+    let moviesFromLocalStorage = localStorage.getItem("IMDB");
+    if (!moviesFromLocalStorage) {
+      return;
+    } else {
+      setWatchList(JSON.parse(moviesFromLocalStorage));
+    }
+  }, [pageNo]);
+
   return (
     <BrowserRouter>
       <Header />
@@ -39,6 +58,9 @@ function App() {
                 handleAddToWatchList={handleAddToWatchList}
                 setWatchList={setWatchList}
                 handleRemoveFromWatchList={handleRemoveFromWatchList}
+                pageNo={pageNo}
+                handleClickPrev={handleClickPrev}
+                handleClickNext={handleClickNext}
               />
             </>
           }
@@ -47,9 +69,11 @@ function App() {
           path="/watchlist"
           element={
             <>
-              <WishList watchList={watchList}
+              <WishList
+                watchList={watchList}
                 setWatchList={setWatchList}
-                handleRemoveFromWatchList={handleRemoveFromWatchList}/>
+                handleRemoveFromWatchList={handleRemoveFromWatchList}
+              />
             </>
           }
         ></Route>

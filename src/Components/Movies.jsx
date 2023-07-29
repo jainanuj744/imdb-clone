@@ -6,42 +6,23 @@ import Pagination from "./Pagination";
 function Movies(props) {
   let [movies, setMovies] = useState([]);
 
-  let [pageNo, setPageNo] = useState(1);
-
   let {
-    setWatchList,
     watchList,
     handleAddToWatchList,
     handleRemoveFromWatchList,
+    pageNo,
+    handleClickPrev,
+    handleClickNext,
   } = props;
 
-  let handleClickPrev = () => {
-    if (pageNo > 1) setPageNo(pageNo - 1);
-  };
-
-  let handleClickNext = () => {
-    setPageNo(pageNo + 1);
-  };
-
-  // console.log(watchList);
   useEffect(() => {
     axios
       .get(
         `https://api.themoviedb.org/3/trending/movie/day?api_key=23c7a8ad79d43490f5f66984e0bdb17b&page=${pageNo}`
       )
       .then(function (res) {
-        // console.log(pageNo);
         setMovies(res.data.results);
       });
-  }, [pageNo]);
-
-  useEffect(() => {
-    let moviesFromLocalStorage = localStorage.getItem("IMDB");
-    if (!moviesFromLocalStorage) {
-      return;
-    } else {
-      setWatchList(JSON.parse(moviesFromLocalStorage));
-    }
   }, [pageNo]);
 
   return (
