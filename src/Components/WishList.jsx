@@ -58,6 +58,7 @@ function WishList(props) {
         {genreList.map((genre) => {
           return (
             <div
+            key={genre}
               onClick={() => handleFilter(genre)}
               className={
                 currGenre == genre
