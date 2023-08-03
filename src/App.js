@@ -45,7 +45,7 @@ function App() {
   }, [pageNo]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/imdb-clone">
       <Header />
       <Routes>
         <Route
